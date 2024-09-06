@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Registration Form</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+        .form-container { 
+            max-width: 400px; /* Narrower container width */
+            width: 100%; 
+            padding: 15px; /* Reduced padding */
+            background: #fff; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            box-sizing: border-box; 
+        }
+        h1 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 15px; /* Reduced margin */
+            font-size: 20px; /* Smaller title font size */
+        }
+        .form-group { 
+            margin-bottom: 10px; /* Reduced margin */
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 3px; /* Reduced margin */
+            color: #007bff; /* Label color */
+            font-weight: bold; 
+            font-size: 14px; /* Smaller font size */
+        }
+        .form-group input[type="text"], 
+        .form-group select, 
+        .form-group textarea { 
+            width: calc(100% - 20px); /* Adjusted width */
+            padding: 8px; /* Reduced padding */
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            font-size: 14px; /* Consistent font size */
+        }
+        .form-group input[type="checkbox"] { 
+            margin-right: 5px; 
+        }
+        .form-group label[for="genderM"], 
+        .form-group label[for="genderF"] { 
+            display: inline; 
+            margin-right: 8px; /* Reduced margin */
+        }
+        .buttons { 
+            margin-top: 15px; /* Reduced margin */
+        }
+        .buttons input { 
+            padding: 8px 18px; /* Mid-level button padding */
+            border: none; 
+            border-radius: 4px; 
+            color: #fff; 
+            cursor: pointer; 
+            font-size: 14px; /* Smaller font size */
+            margin-right: 8px; /* Space between buttons */
+        }
+        .buttons input[type="submit"] { 
+            background-color: #28a745; 
+        }
+        .buttons input[type="submit"]:hover { 
+            background-color: #218838; 
+        }
+        .buttons input[type="button"] { 
+            background-color: #dc3545; 
+        }
+        .buttons input[type="button"]:hover { 
+            background-color: #c82333; 
+        }
+        .message { 
+            margin-top: 15px; /* Reduced margin */
+            font-weight: bold; 
+        }
+        .message.success { 
+            color: #28a745; 
+        }
+        .message.error { 
+            color: #dc3545; 
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Students Registration Form</h1>
+        <form id="form" onsubmit="return submitForm()">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="text" id="age" name="age" pattern="\d+" title="Enter a valid age" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender:</label>
+                <input type="checkbox" id="genderM" name="gender" value="M">
+                <label for="genderM">M</label>
+                <input type="checkbox" id="genderF" name="gender" value="F">
+                <label for="genderF">F</label>
+            </div>
+
+            <div class="form-group">
+                <label for="class">Class:</label>
+                <select id="class" name="class" required>
+                    <option value="" disabled selected>Select class</option>
+                    <option value="7th">7th Class</option>
+                    <option value="8th">8th Class</option>
+                    <option value="9th">9th Class</option>
+                    <option value="10th">10th Class</option>
+                    <option value="11th">11th Class</option>
+                    <option value="12th">12th Class</option>
+                    <option value="1st year">1st Year</option>
+                    <option value="2nd year">2nd Year</option>
+                    <option value="3rd year">3rd Year</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="school">School/College Name:</label>
+                <input type="text" id="school" name="school">
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile Number:</label>
+                <input type="text" id="mobile" name="mobile" pattern="\d{10}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+            </div>
+
+            <div class="buttons">
+                <input type="submit" value="Save">
+                <input type="button" value="Clear" onclick="clearForm()">
+            </div>
+            
+            <div id="message" class="message"></div>
+        </form>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzd08ys-HsX6zK7K7JZKLLJjaZoowXm07CCqcsz66PzHWnYmIGpXT9J0FBzqNYLtfl6/exec'; // Replace with your Apps Script URL
+
+        function submitForm() {
+            const form = document.getElementById('form');
+            const formData = new FormData(form);
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                document.getElementById('message').textContent = "Your data has been saved.";
+                document.getElementById('message').className = "message success";
+                form.reset();
+            })
+            .catch(error => {
+                document.getElementById('message').textContent = "There was an error saving your data.";
+                document.getElementById('message').className = "message error";
+            });
+
+            return false; // Prevent default form submission
+        }
+
+        function clearForm() {
+            document.getElementById("form").reset();
+            document.getElementById("message").textContent = "";
+        }
+    </script>
+</body>
+</html>
